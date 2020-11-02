@@ -29,10 +29,9 @@ Pytorch
 
 ### BibTeX
 ```
-@inproceedings{smirnov2020dps,
-  title={Deep Parametric Shape Predictions using Distance Fields},
-  author={Smirnov, Dmitriy and Fisher, Matthew and Kim, Vladimir G. and Zhang, Richard and Solomon, Justin},
-  year={2020},
-  booktitle={Conference on Computer Vision and Pattern Recognition (CVPR)}
+@article{egiazarian2020deep,
+  title={Deep Vectorization of Technical Drawings},
+  author={Egiazarian, Vage and Voynov, Oleg and Artemov, Alexey and Volkhonskiy, Denis and Safin, Aleksandr and Taktasheva, Maria and Zorin, Denis and Burnaev, Evgeny},
+  journal={arXiv preprint arXiv:2003.05471},
+  year={2020}
 }
-
