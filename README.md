@@ -17,7 +17,7 @@ The main modules are cleaning,vectorization,refinement and merging(each module h
 
 ## Requirments
 Linux system 
-Pycharm
+Pytorch
 
 
 
