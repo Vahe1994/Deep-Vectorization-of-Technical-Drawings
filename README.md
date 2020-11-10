@@ -1,6 +1,17 @@
 ## Deep-Vectorization-of-Technical-Drawings | [Webpage](http://adase.group/3ddl/projects/vectorization/) | [Paper](https://arxiv.org/abs/2003.05471) | [Video](https://youtu.be/v_0UrjbTtHg)
 Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawings]()
+
+## IMPORTANT
+Because, this project is massive and I'm trying to do user friendly repository.
+Not all functions are yet added and tested. I'm currently working on it.See table below.\
+| Tables        | Added         | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
  
+
+
 ## Repository Structure
 
 To increase user friendly for changes we decided to make repository module like.
