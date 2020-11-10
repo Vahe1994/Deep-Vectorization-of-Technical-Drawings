@@ -4,12 +4,15 @@ Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawi
 ## IMPORTANT
 Because, this project is massive and I'm trying to do user friendly repository.
 Not all functions are yet added and tested. I'm currently working on it.See table below.\
-| Tables        | Added         | Cool  |
+| Modules       | Added         | Cool  |
 | ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
- 
+| vectorization | partly        |    No |
+| refinement    | partly        |    No |
+| data_scripts  | No            |    No |
+| datasets      | Yes           |    No |
+| merging       | No            |    No |
+| notebooks     | No            |    No |
+| utils         | partly        |    No |
 
 
 ## Repository Structure
