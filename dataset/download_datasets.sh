@@ -10,7 +10,7 @@ FILEID=13eJ9PSYg3QgSuTE4nXgnVVl17k6lTEb7
 FILENAME=background.zip
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=$FILEID" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=${FILEID}" -O $FILENAME && rm -rf /tmp/cookies.txt
 
-FILEID=11S1ql1Iey1MueYyGiBbC_b-uz21FDQSD
+FILEID=1dgJLgtPvk9SK9rOCnw-WQRBG6OsMUEH3
 FILENAME=Dataset_of cleaning.zip
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=$FILEID" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=${FILEID}" -O $FILENAME && rm -rf /tmp/cookies.txt
 
@@ -18,6 +18,11 @@ wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download
 #downloading Precision floorplan from https://www.precisionfloorplan.com/floorplan-database
 
 python3 precision_floorplan_download.py
+
+FILEID=1dDs06LsLNQUg9HvUwNBIq-95bjmRAiMh
+FILENAME=golden_set.zip
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=$FILEID" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=${FILEID}" -O $FILENAME && rm -rf /tmp/cookies.txt
+
 
 
 # If doesn't work try this type of function
