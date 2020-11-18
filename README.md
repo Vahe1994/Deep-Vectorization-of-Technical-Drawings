@@ -1,4 +1,4 @@
-## Deep-Vectorization-of-Technical-Drawings | [Webpage](http://adase.group/3ddl/projects/vectorization/) | [Paper](https://arxiv.org/abs/2003.05471) | [Video](https://youtu.be/v_0UrjbTtHg)
+## Deep-Vectorization-of-Technical-Drawings | [Webpage](http://adase.group/3ddl/projects/vectorization/) | [Paper](https://arxiv.org/abs/2003.05471) | [Video](https://www.youtube.com/watch?v=lnQNzHJOLvE&t=15s)
 Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawings]()
 
 ## IMPORTANT
