@@ -1,14 +1,25 @@
 from abc import ABC, abstractmethod
 from copy import copy, deepcopy
 
+from scipy.optimize import minimize
 import numpy as np
 import svgpathtools
 
 from .utils.common import mirror_point_x
-from util_files.simplification.utils import pointsC_are_indistinguishable, unique_points
+from util_files.simplification.utils import pointsC_are_indistinguishable
 from util_files.simplification.simplify import bezier as simplify_bezier
+from util_files import warnings
 
 INTERNAL_PRECISION = 4
+_cubic_to_quad = None
+
+
+def cubic_to_quad(*args, maximum_allowed_distance=1):
+    global _cubic_to_quad
+    if _cubic_to_quad is None:
+        import js2py
+        _cubic_to_quad = js2py.require('cubic2quad')
+    return _cubic_to_quad(*args, maximum_allowed_distance)
 
 
 class Primitive(ABC):
@@ -27,6 +38,29 @@ class Primitive(ABC):
 
     def cropped(self, t0, t1):
         return self.__class__(self.segment.cropped(t0, t1))
+
+    def __eq__(self, other):
+        if not isinstance(other, Primitive):
+            return NotImplemented
+        return self.segment == other.segment
+
+    def __ne__(self, other):
+        if not isinstance(other, Primitive):
+            return NotImplemented
+        return not self == other
+
+    def distance_to(self, other):
+        if not isinstance(other, Primitive):
+            return NotImplemented
+
+        def dist(params):
+            t_self, t_other = params
+            return abs(self.segment.poly()(t_self) - other.segment.poly()(t_other))
+
+        res = minimize(dist, [.5, .5], bounds=[[0, 1], [0, 1]])
+        if not res.success:
+            warnings.warn('Minimization of distance failed', warnings.UndefinedWarning)
+        return res.fun
 
     def mirror(self, x):
         self.segment = self.segment.__class__(*(mirror_point_x(p, x) for p in self.segment.bpoints()))
@@ -61,6 +95,10 @@ class Primitive(ABC):
             return reversed_coords + [width]
 
     @abstractmethod
+    def collapsed_if_tiny(self, *args, **kwargs):
+        ...
+
+    @abstractmethod
     def simplified(self, *args, **kwargs):
         ...
 
@@ -89,6 +127,16 @@ class Line(Primitive):
     def from_points(cls, start, end):
         return cls(svgpathtools.Line(complex(*start), complex(*end)))
 
+    @classmethod
+    def from_line(cls, segment):
+        return [cls(segment)]
+
+    def collapsed_if_tiny(self, distinguishability_threshold):
+        r'''Returns (None,) if end points coincide and (self,) otherwise.'''
+        if pointsC_are_indistinguishable(self.segment.start, self.segment.end, distinguishability_threshold):
+            return None,
+        return self.copy(),
+
     def simplified(self, distinguishability_threshold):
         r'''Returns (None,) if end points coincide and (self,) otherwise.'''
         if pointsC_are_indistinguishable(self.segment.start, self.segment.end, distinguishability_threshold):
@@ -112,6 +160,12 @@ class Line(Primitive):
 
 class _Bezier(Primitive):
     MAX_LINEAR_SEGMENTS = 2
+
+    def collapsed_if_tiny(self, distinguishability_threshold):
+        if all(pointsC_are_indistinguishable(self.segment[0], p, distinguishability_threshold) for p in
+               self.segment[1:]):
+            return None,
+        return self.copy(),
 
     def simplified(self, distinguishability_threshold):
         r"""Returns
@@ -154,12 +208,12 @@ class CBezier(_Bezier):
 
     @classmethod
     def from_cubic(cls, segment):
-        return cls(segment)
+        return [cls(segment)]
 
     @classmethod
     def from_quadratic(cls, segment):
         p0, p1, p2 = segment.bpoints()
-        return cls(svgpathtools.CubicBezier(p0, p0 + (p1 - p0) * 2 / 3, p2 + (p1 - p2) * 2 / 3, p2))
+        return [cls(svgpathtools.CubicBezier(p0, p0 + (p1 - p0) * 2 / 3, p2 + (p1 - p2) * 2 / 3, p2))]
 
 
 class QBezier(_Bezier):
@@ -168,19 +222,18 @@ class QBezier(_Bezier):
 
     @classmethod
     def from_cubic(cls, segment):
-        p0, p1, p2, p3 = np.array([[p.real, p.imag] for p in segment.bpoints()])
-        # if cubic curve is an elevated quadratic
-        if np.all(np.round(p2 * 3 - p3, INTERNAL_PRECISION) == np.round(p1 * 3 - p0, INTERNAL_PRECISION)):
-            return cls(svgpathtools.QuadraticBezier(p0, (p2 * 3 - p3) / 2, p3))
-        else:  # split cubic in the inflection point
-            pass # TODO
+        ccoords = [coord for point in segment.bpoints() for coord in (point.real, point.imag)]
+        qcoords = cubic_to_quad(*ccoords)
+        qpoints = [qcoords[i] + qcoords[i + 1] * 1j for i in range(0, len(qcoords), 2)]
+        quads = [qpoints[i:i + 3] for i in range(0, len(qpoints) - 1, 2)]
+        return [cls(svgpathtools.QuadraticBezier(*quad)) for quad in quads]
 
     @classmethod
     def from_quadratic(cls, segment):
-        return cls(segment)
+        return [cls(segment)]
 
 
-Bezier = CBezier  # our canonical bezier curves are cubic
-#Bezier = QBezier  # our canonical bezier curves are quadratic
-Primitive._seg2prim = {svgpathtools.Line: Line, svgpathtools.CubicBezier: Bezier.from_cubic,
+# Bezier = CBezier  # our canonical bezier curves are cubic
+Bezier = QBezier  # our canonical bezier curves are quadratic
+Primitive._seg2prim = {svgpathtools.Line: Line.from_line, svgpathtools.CubicBezier: Bezier.from_cubic,
                        svgpathtools.QuadraticBezier: Bezier.from_quadratic}

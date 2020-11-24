@@ -83,6 +83,9 @@ class GraphicUnits:
     def __mul__(self, other):
         return self.__class__(self.value * other)
 
+    def __neg__(self):
+        return self.__class__(-self.value)
+
     def __repr__(self):
         return str(self)
 

@@ -1,28 +1,32 @@
 from enum import Enum, auto
 
 
+# from vectran.renderers.cairo import cairo_line, cairo_bezier, cairo_arc
 from util_files.geometric import liang_barsky_screen
 
 
 class PrimitiveType(Enum):
     PT_LINE = auto()
-    PT_BEZIER = auto()
+    PT_CBEZIER = auto()
     PT_ARC = auto()
     PT_POINT = auto()
     PT_QBEZIER = auto()
+    PT_QBEZIER_B = auto()
 
 
 PT_ARC = PrimitiveType.PT_ARC
-PT_BEZIER = PrimitiveType.PT_BEZIER
+PT_CBEZIER = PrimitiveType.PT_CBEZIER
 PT_QBEZIER = PrimitiveType.PT_QBEZIER
+PT_QBEZIER_B = PrimitiveType.PT_QBEZIER_B
 PT_LINE = PrimitiveType.PT_LINE
 PT_POINT = PrimitiveType.PT_POINT
 
 
 repr_len_by_type = {
     PT_LINE: 5,
-    PT_BEZIER: 9,
+    PT_CBEZIER: 9,
     PT_QBEZIER: 7,
+    PT_QBEZIER_B: 7,
     PT_ARC: 6,
 }
 
@@ -141,7 +145,8 @@ class Arc(GraphicsPrimitive):
 __all__ = [
     'PT_LINE',
     'PT_ARC',
-    'PT_BEZIER',
+    'PT_QBEZIER',
+    'PT_CBEZIER',
     'PT_POINT',
     'Line'
 ]

@@ -43,6 +43,15 @@ Pytorch
 If you want to compare with us without running code you can download our results on full pipeline on test set
 for [pfp](https://drive.google.com/file/d/1FGm-JQsvOa5sbi_f_-MMl1XC5Z8JGe0F/view?usp=sharing) and for 
 [abc](https://drive.google.com/file/d/1lR5lea3sY4Bhp9QL4MmmPs0kqZ5voPGu/view?usp=sharing) .
+
+<b> Q/A:</b> Why is in your results for abc, some vertical lines dashed.
+  
+<b>Answer:</b> Frankly don't no. All metrics was calculated on this results. If you could find the mistake and correct it 
+metrics would be better that we reported in the paper. 
+The theory is that there is a problem in data augmentation where vertical lines are
+unlikly to appear in training of NN  or mayube some other mistake in code.
+If you can the problem and report it. We would be happy to correct that part of code.
+ 
 ## How to run 
 
 

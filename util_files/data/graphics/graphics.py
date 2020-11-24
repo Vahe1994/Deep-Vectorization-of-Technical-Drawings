@@ -2,6 +2,7 @@ from copy import deepcopy
 import itertools
 from sys import maxsize
 import random
+import re
 
 import numpy as np
 import svgpathtools
@@ -61,7 +62,7 @@ class VectorImage:
 
         if 'viewBox' in svg_attributes:
             view_x, view_y, view_width, view_height = (units.fromrepr(coord, units.Pixels) for coord in
-                                                       svg_attributes['viewBox'].split())
+                                                       re.split(' |,', svg_attributes['viewBox']))
             view_origin = (view_x, view_y)
             view_size = (view_width, view_height)
         else:
@@ -82,7 +83,7 @@ class VectorImage:
         return vector_image
 
     @classmethod
-    def from_grid(cls, images, stack_rows_first=True, margin_width=None, margin_color='black'):
+    def from_grid(cls, images, stack_rows_first=True, margin_width=None, margin_color=None):
         if stack_rows_first:
             for row in images:
                 row_img = row[0].copy()
@@ -92,12 +93,14 @@ class VectorImage:
                     left = row_img.width
                     if margin_width is not None:
                         left = left + margin_width / 2
-                        margin = Path.make_line([left.as_pixels().value, top],
-                                                [left.as_pixels().value, bottom.as_pixels().value], margin_width,
-                                                color=margin_color)
-                        row_img.paths.append(margin)
+                        if margin_color is not None:
+                            margin = Path.make_line([left.as_pixels().value, top],
+                                                    [left.as_pixels().value, bottom.as_pixels().value], margin_width,
+                                                    color=margin_color)
+                            row_img.paths.append(margin)
                         left = left + margin_width / 2
                         row_img.width = row_img.width + margin_width
+                        row_img.view_width = row_img.view_width + margin_width
                     row_img.paths = row_img.paths + [path.translated([left.as_pixels().value, 0]) for path in
                                                      other_img.paths]
                     row_img.rasters_embedded = row_img.rasters_embedded + [
@@ -114,12 +117,14 @@ class VectorImage:
                 bottom = full_img.height
                 if margin_width is not None:
                     bottom = bottom + margin_width / 2
-                    margin = Path.make_line([left, bottom.as_pixels().value],
-                                            [right.as_pixels().value, bottom.as_pixels().value], margin_width,
-                                            color=margin_color)
-                    full_img.paths.append(margin)
+                    if margin_color is not None:
+                        margin = Path.make_line([left, bottom.as_pixels().value],
+                                                [right.as_pixels().value, bottom.as_pixels().value], margin_width,
+                                                color=margin_color)
+                        full_img.paths.append(margin)
                     bottom = bottom + margin_width / 2
                     full_img.height = full_img.height + margin_width
+                    full_img.view_height = full_img.view_height + margin_width
                 full_img.paths = full_img.paths + [path.translated([0, bottom.as_pixels().value]) for path in
                                                    row_img.paths]
                 full_img.rasters_embedded = full_img.rasters_embedded + [
@@ -127,6 +132,24 @@ class VectorImage:
                 full_img.height = full_img.height + row_img.height
                 full_img.view_height = full_img.view_height + row_img.view_height
         return full_img
+
+    def add_frame(self, width, color='black', padding=None):
+        if padding is None:
+            padding = units.Pixels(0)
+        if isinstance(padding, (list, tuple)):
+            left, right, top, bottom = padding
+            left = -left
+            top = -top
+            right = right + self.width
+            bottom = bottom + self.height
+        else:
+            left, right = -padding, self.width + padding
+            top, bottom = -padding, self.height + padding
+
+        frame = Path.make_rectangle(left.as_pixels().value, top.as_pixels().value,
+                                    bottom.as_pixels().value, right.as_pixels().value, width=width, color=color)
+        self.paths.append(frame)
+        self.adjust_view()
 
     def add_raster(self, raster_image, pos=None, size=None, z=1):
         if pos is None:
@@ -138,14 +161,49 @@ class VectorImage:
     def adjust_view(self, margin=.01):
         self.translate((0, 0), adjust_view=True, margin=margin)
 
+    def adjust_viewbox(self):
+        if not hasattr(self, 'width'):
+            return
+        width = self.width.copy()
+        height = self.height.copy()
+        scale_width = width / self.view_width
+        scale_height = height / self.view_height
+        self.scale(min(scale_width, scale_height), only_coordinates=True)
+        self.width = width
+        self.height = height
+
     def copy(self):
         return deepcopy(self)
 
-    def crop(self, bbox):
+    def crop(self, bbox, exact=False):
         [path.crop(bbox) for path in self.paths]
         [raster.crop(bbox) for raster in self.rasters_embedded]
         self.paths = list(filter(lambda path: len(path) > 0, self.paths))
-        self.adjust_view(margin=0)
+        if exact:
+            frame = Path.make_rectangle(bbox[0], bbox[2], bbox[3], bbox[1], width=units.Pixels(0))
+            self.paths.append(frame)
+            self.adjust_view(margin=0)
+            del self.paths[-1]
+        else:
+            self.adjust_view(margin=0)
+
+    def has_overlapping_widths(self, intersection_tol=1e-1):
+        for i in range(len(self.paths)):
+            path1 = self.paths[i]
+            for j in range(i+1, len(self.paths)):
+                path2 = self.paths[j]
+                minimal_distance = (path1.width + path2.width).as_pixels().value / 2
+                for prim1 in path1:
+                    for prim2 in path2:
+                        distance = prim1.distance_to(prim2)
+                        if distance < intersection_tol:
+                            continue
+                        if distance < minimal_distance:
+                            return True
+        return False
+
+    def leave_only_contours(self, default_width):
+        [path.remove_fill(default_width) for path in self.paths]
 
     def leave_width_percentile(self, percentile):
         widths = np.fromiter((float(path.width.as_pixels()) for path in self.paths if path.width is not None),
@@ -153,9 +211,6 @@ class VectorImage:
         min_width = np.percentile(widths, percentile)
         self.paths = list(
             filter(lambda path: (path.width is None) or (path.width.as_pixels() >= min_width), self.paths))
-
-    def leave_only_contours(self, default_width):
-        [path.remove_fill(default_width) for path in self.paths]
 
     def mirror(self, *args, **kwargs):
         x = self.view_x.value + self.view_width.value / 2
@@ -166,6 +221,16 @@ class VectorImage:
         newim = self.copy()
         newim.mirror(*args, **kwargs)
         return newim
+
+    def pad(self, left=None, right=None, top=None, bottom=None):
+        if bottom is not None:
+            self.view_height = self.view_height + bottom
+            if hasattr(self, 'height'):
+                self.height = self.view_height.copy()  # hack
+        if right is not None:
+            self.view_width = self.view_width + right
+            if hasattr(self, 'width'):
+                self.width = self.view_width.copy()  # hack
 
     def put_rasters(self, svgfilename):
         with open(svgfilename, 'r+') as file:
@@ -182,6 +247,27 @@ class VectorImage:
             file.seek(0)
             file.writelines(lines)
 
+    def remove_duplicates(self):
+        unique_paths = []
+        for path in self.paths:
+            if path not in unique_paths:
+                unique_paths.append(path)
+
+        self.paths = []
+        for path in unique_paths:
+            unique_segments_of_this_path = []
+            for segment in path:
+                segment_is_unique = True
+                for other_path in self.paths:
+                    if path.has_same_attributes(other_path) and (segment in other_path):
+                        segment_is_unique = False
+                        break
+                if segment_is_unique:
+                    unique_segments_of_this_path.append(segment)
+            if len(unique_segments_of_this_path) > 0:
+                path.segments = unique_segments_of_this_path
+                self.paths.append(path)
+
     def remove_filled(self):
         self.paths = [path for path in self.paths if not path.fill]
 
@@ -189,6 +275,10 @@ class VectorImage:
         newim = self.copy()
         newim.remove_filled()
         return newim
+
+    def remove_tiny_segments(self, threshold):
+        self.paths = list(filter(lambda path: path.nonempty,
+                                 (path.with_removed_tiny_segments(threshold) for path in self.paths)))
 
     def render(self, renderer):
         if (self.view_x == 0) and (self.view_y == 0):
@@ -252,7 +342,13 @@ class VectorImage:
             self.put_rasters(file)
         return ret
 
-    def scale(self, scale):
+    def scale(self, scale=None, width=None, height=None, only_coordinates=False):
+        if (int(scale is not None) + int(width is not None) + int(height is not None)) != 1:
+            raise ValueError('Specify only one of scale, width, height')
+        if width is not None:
+            scale = width.as_pixels().value / self.view_width.as_pixels().value
+        if height is not None:
+            scale = height.as_pixels().value / self.view_height.as_pixels().value
         self.view_x *= scale
         self.view_y *= scale
         self.view_width *= scale
@@ -261,7 +357,7 @@ class VectorImage:
             self.width *= scale
             self.height *= scale
 
-        [path.scale(scale) for path in self.paths]
+        [path.scale(scale, only_coordinates=only_coordinates) for path in self.paths]
         [raster.scale(scale) for raster in self.rasters_embedded]
 
     def scale_to_width(self, mode, new_value=None):
@@ -387,9 +483,9 @@ class VectorImage:
     def _vahe_representation_random(self, max_lines_n, max_beziers_n):
         lines, beziers = self._vahe_representation_first(max_lines_n=maxsize, max_beziers_n=maxsize)
         if len(lines) > max_lines_n:
-            ids = random.sample(range(len(lines)), max_lines_n)
+            primitive_ids = random.sample(range(len(lines)), max_lines_n)
             lines = [lines[idx] for idx in primitive_ids]
         if len(beziers) > max_beziers_n:
-            ids = random.sample(range(len(beziers)), max_beziers_n)
+            primitive_ids = random.sample(range(len(beziers)), max_beziers_n)
             beziers = [beziers[idx] for idx in primitive_ids]
         return lines, beziers

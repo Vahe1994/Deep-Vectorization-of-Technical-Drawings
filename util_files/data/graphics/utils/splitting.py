@@ -1,6 +1,6 @@
 import numpy as np
 
-from util_files.graphics.primitives import Line, Bezier
+from util_files.data.graphics.primitives import Line, CBezier, QBezier
 from . common import bbox
 
 
@@ -44,7 +44,7 @@ def split_by_line(segs, line):
                 else:
                     right_segs.append(subseg)
                     continue
-            elif isinstance(subseg, Bezier): # doesn't work for quartics and higher order
+            elif isinstance(subseg, (CBezier, QBezier)): # doesn't work for quartics and higher order
                 if any(dist(p) > 0 for p in [subseg.start, subseg.end, subseg.point(.5)]):
                     left_segs.append(subseg)
                     continue

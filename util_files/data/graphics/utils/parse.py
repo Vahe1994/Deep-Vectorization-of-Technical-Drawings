@@ -1,6 +1,6 @@
 import css_parser as cssutils
 
-from util_files.graphics import units
+from util_files.data.graphics import units
 from util_files import warnings
 
 
