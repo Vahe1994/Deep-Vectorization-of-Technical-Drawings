@@ -3,30 +3,12 @@ from sys import byteorder
 import cairocffi as cairo
 import numpy as np
 
-from util_files.graphics.graphics_primitives import PT_LINE, PT_ARC, PT_BEZIER, PT_QBEZIER, PT_POINT
-from util_files.graphics.primitives import Bezier, Line
+from util_files.data.graphics_primitives import PT_LINE, PT_ARC, PT_CBEZIER, PT_QBEZIER, PT_QBEZIER_B, PT_POINT
+from util_files.data.graphics.primitives import CBezier, Line, QBezier
 from .skeleton import make_skeleton_vahe
-
-
-def qbezier_to_cbezier(qbezier):
-    p0 = qbezier[..., :2]
-    qp1 = qbezier[..., 2:4]
-    qp2 = qbezier[..., 4:6]
-    rest = qbezier[..., 6:]
-    p1 = (qp1 * 2 + p0) / 3
-    p2 = (qp1 * 2 + qp2) / 3
-    return np.concatenate([p0, p1, p2, qp2, rest], axis=-1)
+from .utils import qbezier_to_cbezier
 
 def render(data, dimensions, data_representation='paths', linecaps='square', linejoin='miter'):
-    '''
-    Rendering data
-    :param data:
-    :param dimensions:
-    :param data_representation:
-    :param linecaps:
-    :param linejoin:
-    :return:
-    '''
     # prepare data buffer
     width, height = dimensions
     buffer_width = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_A8, width)
@@ -146,6 +128,11 @@ def draw_bezier(ctx, p1, p2, p3, p4):
     ctx.curve_to(*p2, *p3, *p4)
 
 
+def draw_qbezier(ctx, p1, p2, p3):
+    bezier = qbezier_to_cbezier(np.concatenate([p1, p2, p3]))
+    draw_bezier(ctx, bezier[:2], bezier[2:4], bezier[4:6], bezier[6:8])
+
+
 def draw_line_vahe(ctx, line):
     ctx.move_to(*line[:2])
     ctx.line_to(*line[2:4])
@@ -162,10 +149,7 @@ def draw_bezier_vahe(ctx, bezier):
 
 def draw_qbezier_vahe(ctx, bezier):
     bezier = qbezier_to_cbezier(bezier)
-    ctx.move_to(*bezier[:2])
-    ctx.curve_to(*bezier[2:8])
-    ctx.set_line_width(bezier[8])
-    ctx.stroke()
+    draw_bezier_vahe(ctx, bezier)
 
 
 def draw_point_vahe(ctx, point):
@@ -173,9 +157,10 @@ def draw_point_vahe(ctx, point):
     ctx.fill()
 
 
-_draw_prim = {Line: draw_line, Bezier:draw_bezier}
-_draw_repr = {PT_LINE: draw_line_vahe, PT_BEZIER: draw_bezier_vahe, PT_QBEZIER: draw_qbezier_vahe, PT_POINT: draw_point_vahe}
+_draw_prim = {Line: draw_line, CBezier: draw_bezier, QBezier: draw_qbezier}
+_draw_repr = {PT_LINE: draw_line_vahe, PT_CBEZIER: draw_bezier_vahe, PT_QBEZIER: draw_qbezier_vahe,
+              PT_QBEZIER_B: draw_qbezier_vahe, PT_POINT: draw_point_vahe}
 _render_data = {'paths': render_paths, 'vahe': render_vahe}
 _make_skeleton = {'vahe': make_skeleton_vahe}
-_linecaps = {'square': cairo.LINE_CAP_SQUARE, 'butt': cairo.LINE_CAP_BUTT,'round':cairo.LINE_CAP_ROUND}
+_linecaps = {'square': cairo.LINE_CAP_SQUARE, 'butt': cairo.LINE_CAP_BUTT, 'round': cairo.LINE_CAP_ROUND}
 _linejoin = {'miter': cairo.LINE_JOIN_MITER}
