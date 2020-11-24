@@ -6,17 +6,22 @@ Because, this project is massive and I'm trying to do user friendly repository.
 Not all functions are yet added and tested.Sorry for  inconvenience.
 I'm currently working on it.See table below.\
 
-| Modules       | Added         | Cool  |
+| Modules       | Added         | Tested|
 | ------------- |:-------------:| -----:|
 | vectorization | partly        |    No |
+| loss functions| yes           |    No |
+| cleaning      | yes           |    No |
 | refinement    | partly        |    No |
-| data_scripts  | No            |    No |
-| datasets      | Yes           |    No |
+| data_scripts  | Yes           |    No |
+| datasets      | Yes           |   Yes |
+| image degradation| Yes           |   Yes |
 | merging       | No            |    No |
 | notebooks     | No            |    No |
 | utils         | partly        |    No |
+| rendering     | Yes           |   Yes |
+| rendering     | Yes           |    No |
 | dockers       | No            |    No |
-| Readme        | No            |    No |
+| Readme's      | No            |    No |
 
 ## Repository Structure
 
@@ -44,13 +49,7 @@ If you want to compare with us without running code you can download our results
 for [pfp](https://drive.google.com/file/d/1FGm-JQsvOa5sbi_f_-MMl1XC5Z8JGe0F/view?usp=sharing) and for 
 [abc](https://drive.google.com/file/d/1lR5lea3sY4Bhp9QL4MmmPs0kqZ5voPGu/view?usp=sharing) .
 
-<b> Q/A:</b> Why is in your results for abc, some vertical lines dashed.
-  
-<b>Answer:</b> Frankly don't no. All metrics was calculated on this results. If you could find the mistake and correct it 
-metrics would be better that we reported in the paper. 
-The theory is that there is a problem in data augmentation where vertical lines are
-unlikly to appear in training of NN  or mayube some other mistake in code.
-If you can the problem and report it. We would be happy to correct that part of code.
+
  
 ## How to run 
 
