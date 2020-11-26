@@ -1,12 +1,10 @@
 import numpy as np
 from scipy.ndimage.morphology import binary_dilation
 from scipy.spatial.distance import directed_hausdorff
-import point_cloud_utils as pcu # emd_score is not used
-# conda install -c conda-forge point_cloud_utils
-# add to container
+# import point_cloud_utils as pcu  # FIXME: remove pcu from the project
 
 
-import util_files.util.color_utils as color_utils
+import util_files.color_utils as color_utils
 
 
 def _is_binary_1bit(image):
@@ -225,56 +223,55 @@ def iou_score(raster_true, raster_pred, beta=1,
     return iou
 
 
-def raster_to_point_cloud(raster,binarization, envelope_true=0):
-    'Batch version.'
-    raster = _prepare_raster(raster, binarization=binarization, envelope=envelope_true)
-#     print(max(raster))
-#     print(np.max(raster))
-    xyz = np.argwhere(raster > 0.5).astype(np.float64)
-    if xyz.shape[1]==2:
-        xyz = np.concatenate((xyz,np.zeros((xyz.shape[0],1))),axis=-1)
-        xyz[:,0] = xyz[:,0]/raster.shape[0]
-        xyz[:,1] = xyz[:,1]/raster.shape[1]
-    else:
-        xyz[:,1] = xyz[:,1]/raster.shape[1]
-        xyz[:,2] = xyz[:,2]/raster.shape[2]
-    return xyz
-
-
-def emd_score(raster_true, raster_pred, beta=1,
-              smooth=1e-6, average=None, rtol=1e-8,
-              envelope_true=0, binarization=None):
-    """Computes earth moving distance score.Batch version.Input b,1,h,w. values 0,255"""
-    sinkhorn_dist = []
-    for it in range(raster_true.shape[0]):
-        xyz_true = raster_to_point_cloud(raster_true[it],binarization)
-        xyz_pred = raster_to_point_cloud(raster_pred[it], binarization)
-        if(xyz_true.shape[0]<=1 or xyz_pred.shape[0]<=1):
-            continue
-        M = pcu.pairwise_distances(xyz_true, xyz_pred)
-        w_a = np.ones(xyz_true.shape[0])
-        w_b = np.ones(xyz_pred.shape[0])
-
-        P = pcu.sinkhorn(w_a, w_b, M, eps=1e-3)
-
-        sinkhorn_dist.append((M * P).sum())
-    return np.mean(sinkhorn_dist)
-
-
-def cd_score(raster_true, raster_pred, beta=1,
-              smooth=1e-6, average=None, rtol=1e-8,
-              envelope_true=0, binarization=None):
-    """Computes chamfer distance score.Batch version."""
-    chamfer_dist = []
-    for it in range(raster_true.shape[0]):
-        xyz_true = raster_to_point_cloud(raster_true[it], binarization, envelope_true)
-        xyz_pred = raster_to_point_cloud(raster_pred[it], binarization)
+# def raster_to_point_cloud(raster,binarization, envelope_true=0):
+#     'Batch version.'
+#     raster = _prepare_raster(raster, binarization=binarization, envelope=envelope_true)
+#
+#     xyz = np.argwhere(raster > 0.5).astype(np.float64)
+#     if xyz.shape[1]==2:
+#         xyz = np.concatenate((xyz,np.zeros((xyz.shape[0],1))),axis=-1)
+#         xyz[:,0] = xyz[:,0]/raster.shape[0]
+#         xyz[:,1] = xyz[:,1]/raster.shape[1]
+#     else:
+#         xyz[:,1] = xyz[:,1]/raster.shape[1]
+#         xyz[:,2] = xyz[:,2]/raster.shape[2]
+#     return xyz
+#
+#
+# def emd_score(raster_true, raster_pred, beta=1,
+#               smooth=1e-6, average=None, rtol=1e-8,
+#               envelope_true=0, binarization=None):
+#     """Computes earth moving distance score.Batch version.Input b,1,h,w. values 0,255"""
+#     sinkhorn_dist = []
+#     for it in range(raster_true.shape[0]):
+#         xyz_true = raster_to_point_cloud(raster_true[it],binarization)
+#         xyz_pred = raster_to_point_cloud(raster_pred[it], binarization)
+#         if(xyz_true.shape[0]<=1 or xyz_pred.shape[0]<=1):
+#             continue
+#         M = pcu.pairwise_distances(xyz_true, xyz_pred)
+#         w_a = np.ones(xyz_true.shape[0])
+#         w_b = np.ones(xyz_pred.shape[0])
+#
+#         P = pcu.sinkhorn(w_a, w_b, M, eps=1e-3)
+#
+#         sinkhorn_dist.append((M * P).sum())
+#     return np.mean(sinkhorn_dist)
+#
+#
+# def cd_score(raster_true, raster_pred, beta=1,
+#               smooth=1e-6, average=None, rtol=1e-8,
+#               envelope_true=0, binarization=None):
+#     """Computes chamfer distance score.Batch version."""
+#     chamfer_dist = []
+#     for it in range(raster_true.shape[0]):
+#         xyz_true = raster_to_point_cloud(raster_true[it], binarization, envelope_true)
+#         xyz_pred = raster_to_point_cloud(raster_pred[it], binarization)
+# #         print(xyz_true.shape,xyz_pred.shape)
+#         if(xyz_true.shape[0]<=1 or xyz_pred.shape[0]<=1):
+#             continue
 #         print(xyz_true.shape,xyz_pred.shape)
-        if(xyz_true.shape[0]<=1 or xyz_pred.shape[0]<=1):
-            continue
-#         print(xyz_true.shape,xyz_pred.shape)
-        chamfer_dist.append(pcu.chamfer(xyz_true, xyz_pred))
-    return np.mean(chamfer_dist)
+#         chamfer_dist.append(pcu.chamfer(xyz_true, xyz_pred))
+#     return np.mean(chamfer_dist)
 
 
 
