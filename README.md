@@ -2,9 +2,9 @@
 Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawings]()
 
 ## IMPORTANT
-Because, this project is massive and I'm trying to code refactoring for user friendly repository.
+Because, this project is massive and I'm trying to code refactoring for user friendly repository with easily modifiable modules.
 Not all functions are yet added and tested.Sorry for  inconvenience.
-I'm currently working on it.See table below.\
+I'm currently working on it.See table below.
 
 | Modules       | Added         | Tested|
 | ------------- |:-------------:| -----:|
