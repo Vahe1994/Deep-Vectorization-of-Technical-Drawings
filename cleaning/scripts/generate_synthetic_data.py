@@ -6,10 +6,10 @@ from tqdm import tqdm
 
 
 def parse_args():
+
     parser = argparse.ArgumentParser()
 
-
-    parser.add_argument('--img_path', type=str, default='../../dataset/Synthetic/', help='Path to save data')
+    parser.add_argument('--img_path', type=str, default='../../dataset/Cleaning/Synthetic/train', help='Path to save data')
     parser.add_argument('--data_count', type=int, default=7, help='Generated data count')
     parser.add_argument('--data_count_start', type=int, default=0, help='Generated data count start')
     args = parser.parse_args()

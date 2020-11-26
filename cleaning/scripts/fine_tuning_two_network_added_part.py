@@ -13,7 +13,8 @@ import torch.nn.functional as F
 
 from cleaning.utils.dataloader import MakeDataSynt
 from cleaning.utils.loss import IOU, CleaningLoss
-# from vectran.metrics.raster_metrics import iou_score
+### Todo check this metric or change it
+from util_files.metrics.raster_metrics import iou_score
 from cleaning.models.Unet.unet_model import UNet
 from cleaning.models.SmallUnet.unet import SmallUnet
 
@@ -113,14 +114,13 @@ def validate(tb, val_loader, unet, gen, loss_func, global_step ):
             
 
             val_loss_epoch.append(loss.cpu().data.numpy())
-            # TODO add IOU for Tensorboard
-            # iou_scr_without_gan = iou_score(1 - torch.round(logits_extract.squeeze(1)).cpu().long().numpy(),1 - torch.round(y_restor.squeeze(1)).cpu().long().numpy())
-            #
-            # val_iou_without_gan.append(iou_scr_without_gan)
-            #
-            # iou_scr = iou_score(1 - torch.round(torch.clamp(logits_extract + logits_restore, 0, 1).squeeze(1).cpu()).long().numpy(),1 - torch.round(y_restor.squeeze(1)).cpu().long().numpy())
-            #
-            # val_iou_extract.append(iou_scr)
+            iou_scr_without_gan = iou_score(1 - torch.round(logits_extract.squeeze(1)).cpu().long().numpy(),1 - torch.round(y_restor.squeeze(1)).cpu().long().numpy())
+
+            val_iou_without_gan.append(iou_scr_without_gan)
+
+            iou_scr = iou_score(1 - torch.round(torch.clamp(logits_extract + logits_restore, 0, 1).squeeze(1).cpu()).long().numpy(),1 - torch.round(y_restor.squeeze(1)).cpu().long().numpy())
+
+            val_iou_extract.append(iou_scr)
 
     tb.add_scalar('val_iou_extract', np.mean(val_iou_extract), global_step=global_step)
     tb.add_scalar('val_loss', np.mean(val_loss_epoch), global_step=global_step)

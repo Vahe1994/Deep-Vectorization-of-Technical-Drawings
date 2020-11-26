@@ -13,7 +13,10 @@ from cleaning.utils.dataloader import MakeDataSynt
 from cleaning.utils.loss import CleaningLoss
 from cleaning.models.Unet.unet_model import UNet
 from cleaning.models.SmallUnet.unet import SmallUnet
-# from vectran.metrics.raster_metrics import iou_score
+
+
+### Todo check this metric or change it
+from util_files.metrics.raster_metrics import iou_score
 
 MODEL_LOSS = {
     'UNET': {
@@ -84,11 +87,20 @@ def validate(tb, val_loader, model, loss_func, global_step):
 
         logits_restor, logits_extract = None, model(x_input)  # restoration + extraction
 
-        loss = loss_func(logits_extract, logits_restor, y_extract, y_restor)
+        if args.added_part == "Yes":
+            # training "Unet on without filling wholes on h_gt in synthetic
+            loss = loss_func(logits_extract, logits_restor, y_extract, y_restor)
+            iou_scr = iou_score(torch.round(torch.clamp(logits_extract, 0, 1).cpu()).long().numpy(),
+                                y_extract.cpu().long().numpy())
+        else:
+            # training "Unet on whole image nh_gt, default this one
+            loss = loss_func(logits_extract, logits_restor, y_restor, y_extract)
+            iou_scr = iou_score(torch.round(torch.clamp(logits_extract, 0, 1).cpu()).long().numpy(),
+                                y_restor.cpu().long().numpy())
 
-        #TODO add IOU for Tensorboard
-        # iou_scr = iou_score(torch.round(torch.clamp(logits_extract, 0, 1).cpu()).long().numpy(), y_extract.cpu().long().numpy())
-        # val_iou_extract.append(iou_scr)
+
+
+        val_iou_extract.append(iou_scr)
         val_loss_epoch.append(loss.cpu().data.numpy())
         del loss
 
