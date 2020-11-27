@@ -1,9 +1,9 @@
 import json
 
-from vectorization.models.generic import GenericVectorizationNet
-from vectorization.models.fully_conv_net import FullyConvolutionalNet
-from vectorization.models.lstm import LSTMTagger, LSTMTagger_normal, LSTMTagger_attent
-from vectorization.modules.base import load_with_spec
+from .generic import GenericVectorizationNet
+from .fully_conv_net import FullyConvolutionalNet
+from .lstm import LSTMTagger, LSTMTagger_normal, LSTMTagger_attent
+from vectran.modules.base import load_with_spec
 
 
 MODEL_BY_NAME = {

@@ -2,26 +2,33 @@
 Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawings]()
 
 ## IMPORTANT
-Because, this project is massive and I'm trying to code refactoring for user friendly repository with easily modifiable modules.
+Datasets and files to compare are ready to be used.  
+<b>And for code:</b>
+Because, this project is massive and I'm trying to do code refactoring for making user friendly repository with easily modifiable modules,
 Not all functions are yet added and tested.Sorry for  inconvenience.
-I'm currently working on it.See table below.
+I'm currently working on it.See table below. I'm not recommend to train or run this code yet,
+but you can look at parts that you may interested with.
 
-| Modules       | Added         | Tested|
-| ------------- |:-------------:| -----:|
-| vectorization | partly        |    No |
-| loss functions| yes           |   yes |
-| cleaning      | yes           |    No |
-| refinement    | partly        |    No |
-| data_scripts  | Yes           |    No |
-| datasets      | Yes           |   Yes |
-| image degradation| Yes        |   Yes |
-| merging       | partly        |    No |
-| notebooks     | No            |    No |
-| utils         | partly        |    No |
-| rendering     | Yes           |   Yes |
-| metrics       | partly        |    No |
-| dockers       | No            |    No |
-| Readme's      | No            |    No |
+
+| Modules       | Added         | Refactored| Tested|
+| ------------- |:-------------:| :-----:| -----:|
+| vectorization | partly        |    No |    No |
+| loss functions| yes           |   yes |   yes |
+| cleaning      | yes           |    No |    No |
+| refinement    | yes           |    No |    No |
+| data_scripts  | yes           |    No |    No |
+| datasets      | yes           |   yes |    No |
+| image degradation| yes        |   No  |    yes |
+| merging       | yes           |   No  |    No  |
+| notebooks     | No            |    No |    No |
+| utils         | partly        |    No |    No |
+| rendering     | yes           |   yes |   yes |
+| metrics       | partly        |    No |    No |
+| trained models| No            |    No |    No |
+| dockers       | No            |    No |    No |
+| script to run | No            |    No |    No |
+| Readme's      | No            |    No |    No |
+| documentation | partly        |    No |    No |
 
 ## Repository Structure
 

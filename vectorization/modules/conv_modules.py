@@ -3,7 +3,7 @@ from itertools import islice
 import torch.nn as nn
 import torchvision.models as models
 
-from vectorization.transformer_vectorizer.modules.maybe_module import MaybeModule
+from vectorization.modules.maybe_module import MaybeModule
 from .base import ParameterizedModule
 
 

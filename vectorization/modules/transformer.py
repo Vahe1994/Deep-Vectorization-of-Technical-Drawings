@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from ._transformer_modules import TransformerLayer, get_sinusoid_encoding_table
-from vectorization.transformer_vectorizer.modules.base import ParameterizedModule
+from vectorization.modules import ParameterizedModule
 
 
 class _InternalSequentialTransformerDecoder(nn.Module):

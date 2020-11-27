@@ -1,7 +1,7 @@
 import torch.nn as nn
 
-from vectorization.transformer_vectorizer.modules.base import ParameterizedModule
-from vectorization.transformer_vectorizer.modules.maybe_module import MaybeModule
+from vectorization.modules import ParameterizedModule
+from vectorization.modules.maybe_module import MaybeModule
 
 
 class _BasicLinear(nn.Module):
