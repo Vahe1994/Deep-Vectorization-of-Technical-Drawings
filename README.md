@@ -2,13 +2,14 @@
 Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawings]()
 
 ## IMPORTANT
-Datasets and files to compare are ready to be used.  
-<b>And for code:</b>
-Because, this project is massive and I'm trying to do code refactoring for making user friendly repository with easily modifiable modules,
-Not all functions are yet added and tested.Sorry for  inconvenience.
-I'm currently working on it.See table below. I'm not recommend to train or run this code yet,
-but you can look at parts that you may interested with.
-
+ 
+Because, this project is massive and I'm done code refactoring and restructuring for making user friendly repository with module like design
+(to be easily modifiable and added new parts if needed),
+not all functions are yet fully added and tested.Sorry for  inconvenience.
+I'm currently working on it. I don't recommend to train or run this code yet,
+but you can look at parts that you may interested with.  Datasets and files to compare are ready to be used. 
+I will soon add trained model and will add readme and correct the code if needed to run smoothly.
+See table below.
 
 | Modules       | Added         | Refactored| Tested|
 | ------------- |:-------------:| :-----:| -----:|
@@ -29,6 +30,7 @@ but you can look at parts that you may interested with.
 | script to run | No            |    No |    No |
 | Readme's      | No            |    No |    No |
 | documentation | partly        |    No |    No |
+| requirment    | No        |    No |    No |
 
 ## Repository Structure
 
@@ -40,7 +42,7 @@ Each folder has readme with more details. Here is brief content of each folder.
 * vectorization - NN models, script to train
 * refinement - refinement module for curves and for lines
 * merging - merging module for curves and for lines
-* dataset - scripts to download ABC,PFP,cleaning datasets
+* dataset - scripts to download ABC,PFP,cleaning datasets, scripts to modify data into patches and memory maped them.
 * notebooks - playground to show some function in action
 * utils - loss functions, rendering, metrics
 * scripts - scripts to run training and evaluation
@@ -51,7 +53,7 @@ Python 3
 Pytorch 1.3 \
 tochvision \
 rtree \
-conda
+conda\
 
 For more info look at requirement.txt
 
