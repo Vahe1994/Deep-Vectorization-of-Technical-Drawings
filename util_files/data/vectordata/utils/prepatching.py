@@ -4,7 +4,7 @@ import os
 
 import numpy as np
 
-from vectran.data.graphics.graphics import VectorImage
+from util_files.data.graphics.graphics import VectorImage
 
 
 def make_patches(data_root, patches_root, patch_size, outline_filled=None, remove_filled=False, min_widths=('def',),

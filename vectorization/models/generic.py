@@ -1,8 +1,8 @@
 import torch.nn as nn
 
-from vectran.modules.base import ParameterizedModule, load_with_spec
-from vectran.modules import module_by_kind
-from vectran.modules.maybe_module import MaybeModule
+from vectorization.modules.base import ParameterizedModule, load_with_spec
+from vectorization.modules import module_by_kind
+from vectorization.modules.maybe_module import MaybeModule
 
 
 class ConvBlock(nn.Module):

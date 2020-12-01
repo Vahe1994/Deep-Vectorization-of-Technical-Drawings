@@ -1,84 +1,28 @@
 #!/usr/bin/env python3
 from __future__ import division
-import argparse
-from itertools import product
-import os
 
-
-import numpy as np
-import skimage.io as skio
-import torch
-
-from util_files.patchify import patchify
-from cleaning.src.gan import Generator
-from cleaning.src.unet import SmallUnet
-from PIL import Image
-import os
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-import argparse
-from collections import defaultdict
-from itertools import islice
-import json
-from typing import Tuple
-
-import numpy as np
-import torch
-import torch.nn
-import torch.optim
-from tqdm import tqdm
-from tqdm import trange
-from IPython.display import clear_output
 import os, sys
 
 sys.path.append("..")
 sys.path.append(os.path.join(os.getcwd(), '..'))
 
-import torch.nn.functional as F
-
 from tqdm import tqdm
-from tqdm import trange
 
-import skimage.io as skio
-
-from itertools import product
-import cairocffi as cairo
-import numpy as np
-import scipy.misc
-from scipy.ndimage import rotate
-from PIL import Image
-import PIL.ImageOps
-import rtree
-from rtree import index
 import numpy as np
 import os
 import math
-from time import time
+
 
 from scipy.spatial import distance
-from svgpathtools import Path, Line
+
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model, datasets
 
-from util_files.logging import create_logger
-
-
-import util_files.metrics.vector_metrics as vmetrics
-
-from util_files.metrics.vector_metrics import iou_score
-from util_files.data.transforms.degradation_models import DegradationGenerator
-from util_files.data.graphics_primitives import PT_LINE
 import util_files.data.graphics_primitives as graphics_primitives
 from util_files.rendering.cairo import render_with_skeleton
 
-from vectorization.models import load_model
 from util_files.geometric import liang_barsky_screen
-from util_files.metrics.raster_metrics import iou_score as r_iou
-import util_files.metrics.vector_metrics as vmetrics
-from util_files.patchify import patchify
-from torchvision import transforms
+
 
 
 

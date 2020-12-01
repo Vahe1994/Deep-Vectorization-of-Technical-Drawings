@@ -1,8 +1,8 @@
 from glob import glob
 import os
 
-from vectran.data.line_drawings_dataset import LineDrawingsDataset
-from vectran.data.graphics_primitives import PrimitiveType
+from util_files.data.line_drawings_dataset import LineDrawingsDataset
+from util_files.data.graphics_primitives import PrimitiveType
 from .common import get_random_patch_from_svg
 from .common import sample_primitive_representation
 

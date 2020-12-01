@@ -37,7 +37,7 @@ class PrimitiveTensor:
         self.size_fixed = True
         self.pos_fixed = True
 
-    import vectran.optimization.energy.gaussian as energy_procedures
+    import util_files.optimization.energy.gaussian as energy_procedures
 
     def fix_pos(self):
         if self.pos_fixed:

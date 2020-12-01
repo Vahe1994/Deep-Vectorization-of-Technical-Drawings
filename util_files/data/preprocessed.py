@@ -25,7 +25,7 @@ svg_parameters = {
 }
 
 class SynParameters:
-    from vectran.data.syndata.utils import renormalize as _normalize_probas
+    from util_files.data.syndata.utils import renormalize as _normalize_probas
 
     strokes_probas = _normalize_probas({1: .45, 2: .45, 3: .1})
 
@@ -45,7 +45,7 @@ class SynParameters:
     ##     max_rot_deviation = 10
     ##     rotations += [base_rot + dev_rot * dev_sign for dev_rot in range(1, max_rot_deviation + 1, 1) for base_rot in (0, 90, 180, 270) for dev_sign in (1, -1)]
     ##     return rotations
-    def get_offset_angles():
+    def get_offset_angles(self):
         return range(0, 360, 4)
     offset_directions_probas = _normalize_probas({np.deg2rad(angle): 1 for angle in get_offset_angles()})
 

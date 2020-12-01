@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-from vectran.renderers.cairo import render_with_skeleton, PT_LINE
+from util_files.rendering.cairo import render_with_skeleton, PT_LINE
 
 from ..primitive_tensor import PrimitiveTensor
 from ...parameters import coordinates_constrain_padding, division_epsilon, dwarfness_ratio, refinement_linecaps,\

@@ -1,9 +1,9 @@
 from glob import iglob
 import os
 
-from vectran.data.line_drawings_dataset import LineDrawingsDataset
-from vectran.data.graphics_primitives import PrimitiveType
-from vectran.data.graphics.graphics import VectorImage
+from util_files.data.line_drawings_dataset import LineDrawingsDataset
+from util_files.data.graphics_primitives import PrimitiveType
+from util_files.data.graphics.graphics import VectorImage
 
 
 def patch_path_pattern(root, basename, patch_size, origin, width='def', orientation='def', rotation=0, t=(0,0)):

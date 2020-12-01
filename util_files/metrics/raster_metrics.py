@@ -386,8 +386,8 @@ __all__ = [
     'precision_score',
     'recall_score',
     'iou_score',
-    'cd_score',
-    'emd_score',
+    # 'cd_score',
+    # 'emd_score',
     'psnr_score',
     'hausdorff_score',
 ]

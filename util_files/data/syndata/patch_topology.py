@@ -5,7 +5,7 @@ import numpy as np
 from numpy.random import uniform
 
 from util_files.data.graphics_primitives import PT_LINE, Line
-from util_files.util.geometric import direction_from_angle
+from util_files.geometric import direction_from_angle
 
 from .snapping import snap_beam, snap_outer
 from .utils import renormalize, choose_with_proba

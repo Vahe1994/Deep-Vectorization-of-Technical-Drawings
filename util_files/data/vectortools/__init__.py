@@ -2,7 +2,7 @@ from svgpathtools import Arc
 from svgpathtools import CubicBezier
 from svgpathtools import Line
 from svgpathtools import Path
-from svgpathtools import polygon
+from svgpathtools.path import polygon
 from svgpathtools import QuadraticBezier
 import svgpathtools
 

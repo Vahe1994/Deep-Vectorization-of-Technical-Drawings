@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from vectorization.modules import ParameterizedModule
+from vectorization.modules.base import ParameterizedModule
 from vectorization.modules.maybe_module import MaybeModule
 
 

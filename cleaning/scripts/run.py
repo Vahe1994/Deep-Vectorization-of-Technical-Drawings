@@ -112,7 +112,7 @@ def main(options):
             skio.imsave(options.cleaned_filename, cleaned_rgb)
 
     if options.vectorize:
-        #vector_model =  # load_vector_model(options.vector_model_filename)
+        vector_model =  load_vector_model(options.vector_model_filename)
         if options.use_patches:
             patches_rgb, patches_offsets = split_to_patches(cleaned_rgb, options.patch_size)
             #patches_vector = []

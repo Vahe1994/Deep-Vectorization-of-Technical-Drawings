@@ -4,7 +4,7 @@ import numpy as np
 
 # sys.path.append('/home/oyvoinov/work/3ddl/vectorization/FloorplanVectorization')
 sys.path.append('/code')
-from vectran.data.vectordata.utils.prepatching import make_patches
+from util_files.data.vectordata.utils.prepatching import make_patches
 
 
 def prepatch_sesyd(data_root, patches_root, only_walls=False, num_workers=-1):

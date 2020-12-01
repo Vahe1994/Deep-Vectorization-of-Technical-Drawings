@@ -4,8 +4,8 @@ import warnings
 
 import svgpathtools
 
-from vectran.data import graphics_primitives
-from vectran.data import vectortools
+from util_files.data import graphics_primitives
+from util_files.data import vectortools
 
 
 def get_random_patch_from_svg(svg_file_location, patch_size, margin=1, new_ppi_to_old_ppi=1, scale_width=1,

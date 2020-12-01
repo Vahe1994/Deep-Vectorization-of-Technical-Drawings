@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from vectran.modules.base import ParameterizedModule
+from vectorization.modules.base import ParameterizedModule
 # TODO @mvkolos: parameterize the model with reasonable layer sizes
 
 

@@ -12,6 +12,7 @@ from .primitives import Bezier, Line
 from .path import Path
 from .raster_embedded import RasterEmbedded
 from . import units
+# import pathos
 
 '''Arcs are ignored atm.'''
 

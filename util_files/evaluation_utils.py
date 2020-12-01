@@ -1,8 +1,8 @@
 import torch
 
-from vectran.data.graphics.graphics import Path, VectorImage
-from vectran.data.graphics.units import Pixels
-from vectran.data.graphics_primitives import PT_LINE, PT_QBEZIER
+from util_files.data.graphics.graphics import Path, VectorImage
+from util_files.data.graphics.units import Pixels
+from util_files.data.graphics_primitives import PT_LINE, PT_QBEZIER
 
 
 def vector_image_from_patches(primitives, patch_offsets, control_points_n, patch_size, image_size,

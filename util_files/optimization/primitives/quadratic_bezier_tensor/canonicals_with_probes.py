@@ -1,5 +1,5 @@
 import torch
-
+import numpy as np
 
 def calculate_canonical_coordinates_with_probes(self, pixel_coords):
     r"""

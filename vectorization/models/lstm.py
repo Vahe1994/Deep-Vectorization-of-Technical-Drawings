@@ -4,9 +4,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from vectran.modules.base import ParameterizedModule
-from vectran.modules._transformer_modules import get_sinusoid_encoding_table
-
+from vectorization.modules.base import ParameterizedModule
+from vectorization.modules._transformer_modules import get_sinusoid_encoding_table
+from vectorization.models.common import ConvFeatureExtractor
 
 # TODO @mvkolos, @artonson: derive the models classes from base; parameterize the model with reasonable layer sizes
 class LSTMTagger(ParameterizedModule):
@@ -14,6 +14,8 @@ class LSTMTagger(ParameterizedModule):
         super(LSTMTagger, self).__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
+
+        #TODO rewrite to new standart
         self.conv = ConvFeatureExtractor(
             in_channels=input_channels, resnet_count=resnet_count, hidden_dim=hidden_dim,  **kwargs)
 

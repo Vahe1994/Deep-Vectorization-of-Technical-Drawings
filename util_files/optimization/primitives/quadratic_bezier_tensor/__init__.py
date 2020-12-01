@@ -2,14 +2,14 @@ import numpy as np
 import torch
 from torch import nn
 
-from vectran.renderers.cairo import render_with_skeleton, PT_QBEZIER_B
+from util_files.rendering.cairo import render_with_skeleton, PT_QBEZIER_B
 
 from ..primitive_tensor import PrimitiveTensor
 from ...parameters import coordinates_constrain_padding, division_epsilon, dwarfness_ratio, elementary_halfwidth,\
     empty_pixel_tolerance, min_linear_size, neighbourhood_padding, qbezier_max_dt_end,\
     qbezier_min_fold_halfangle_radians, qbezier_y_neighbourhood_padding, refinement_linecaps, refinement_linejoin,\
     reinit_initial_length, reinit_initial_width, visibility_width_threshold
-from vectran.simplification.join_qb import join_quad_beziers
+from util_files.simplification.join_qb import join_quad_beziers
 
 
 class QuadraticBezierTensor(PrimitiveTensor):
@@ -64,6 +64,10 @@ class QuadraticBezierTensor(PrimitiveTensor):
 
         # optimized parameters
         _ = self._width = width.to(device).requires_grad_()
+        #TODO for Torch 1.4+ new_empty not work with requires_grad
+        # self._p2_to_p1_len = _.new_empty([patches_n, 1, primitives_n], requires_grad=True)
+        # self._p2_to_p1_len.requires_grad(True)
+        # empty with type, size and device
         self._p2_to_p1_len = _.new_empty([patches_n, 1, primitives_n], requires_grad=True)
         self._p2_to_p3_len = _.new_empty([patches_n, 1, primitives_n], requires_grad=True)
         self._b = _.new_empty([patches_n, spatial_dims_n, primitives_n], requires_grad=True)
