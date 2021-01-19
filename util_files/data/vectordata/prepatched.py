@@ -29,6 +29,7 @@ class PrepatchedSVG(LineDrawingsDataset):
         else:
             self.source_images = list(set(iglob(f'{data_root}/{source_pattern}.svg', recursive=True)))
 
+
     def _get_vector_item(self, idx):
         file = self.source_images[idx]
         lines, beziers = VectorImage.from_svg(file).vahe_representation(max_lines_n=self.max_primitives[PrimitiveType.PT_LINE], max_beziers_n=self.max_primitives[PrimitiveType.PT_QBEZIER], random_sampling=self.sample_primitives_randomly)

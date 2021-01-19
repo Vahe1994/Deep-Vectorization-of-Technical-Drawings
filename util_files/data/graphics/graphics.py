@@ -12,6 +12,7 @@ from .primitives import Bezier, Line
 from .path import Path
 from .raster_embedded import RasterEmbedded
 from . import units
+
 # import pathos
 
 '''Arcs are ignored atm.'''
@@ -25,6 +26,7 @@ class VectorImage:
         if view_origin is not None:
             self.view_x, self.view_y = view_origin
         else:
+
             self.view_x, self.view_y = [units.Pixels(0), units.Pixels(0)]
         self.view_width, self.view_height = view_size
         self.view_width = self.view_width.copy()  # hack
@@ -191,7 +193,7 @@ class VectorImage:
     def has_overlapping_widths(self, intersection_tol=1e-1):
         for i in range(len(self.paths)):
             path1 = self.paths[i]
-            for j in range(i+1, len(self.paths)):
+            for j in range(i + 1, len(self.paths)):
                 path2 = self.paths[j]
                 minimal_distance = (path1.width + path2.width).as_pixels().value / 2
                 for prim1 in path1:
@@ -320,8 +322,12 @@ class VectorImage:
         else:
             svg_attributes['width'] = str(self.view_width)
             svg_attributes['height'] = str(self.view_height)
-        svg_attributes['viewBox'] = '{} {} {} {}'.format(self.view_x, self.view_y, self.view_width, self.view_height)
+        # if typeerror TypeError: is not a valid value for attribute 'viewBox' at svg-element <svg>.Uncomment 1st one
+        # svg_attributes['viewBox'] = '{} {} {} {}'.format(self.view_x, self.view_y, self.view_width, self.view_height)
+        svg_attributes['viewBox'] = '{} {} {} {}'.format(int(self.view_x), int(self.view_y), int(self.view_width),
+                                                         int(self.view_height))
 
+        svg_attributes['size'] =(svg_attributes['width'], svg_attributes['height'])
         if 'nodes' in kwargs:
             nodes = kwargs['nodes']
         else:
@@ -336,7 +342,7 @@ class VectorImage:
             node_radii = None
 
         paths, attributes = zip(*(path.to_svgpathtools() for path in self.paths))
-
+        print(svg_attributes)
         ret = svgpathtools.wsvg(paths, filename=file, attributes=attributes, svg_attributes=svg_attributes,
                                 nodes=nodes, node_colors=node_colors, node_radii=node_radii)
         if len(self.rasters_embedded) > 0:

@@ -51,12 +51,11 @@ Each folder has readme with more details. Here is brief content of each folder.
 ## Requirments
 Linux system \
 Python 3
-Pytorch 1.3 \
+Pytorch 1.3+ \
 tochvision \
 rtree \
-conda\
+conda \
 
-For more info look at requirement.txt
 
 ## Compare 
 
@@ -64,12 +63,24 @@ If you want to compare with us without running code you can download our results
 for [pfp](https://drive.google.com/file/d/1FGm-JQsvOa5sbi_f_-MMl1XC5Z8JGe0F/view?usp=sharing) and for 
 [abc](https://drive.google.com/file/d/1lR5lea3sY4Bhp9QL4MmmPs0kqZ5voPGu/view?usp=sharing) .
 
+## Dataset
+Scripts to download dataset are in folder dataset/.
+* For abc,real datasets use  download_dataset.sh
+* For PFP use precision_floorplan_download.py  
+Read ReadMe there for more instructions.
 
- 
+## Notebooks 
+
+To shows how some of functions usability, there are several noteooks ar notebboks folder.
+1) Rendering notebook
+2) Dataset loading,model loading, model training,loss function loading
+
+
 ## How to run 
 
 
 ## How to train 
+
 
 ### BibTeX
 ```

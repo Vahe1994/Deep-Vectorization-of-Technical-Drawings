@@ -5,7 +5,8 @@ import sys
 
 import numpy as np
 
-sys.path.append('/code')
+# sys.path.append('/code')
+sys.path.append('/home/vage/PycharmProjects/Deep-Vectorization-of-Technical-Drawings/')
 from util_files.data.graphics.graphics import VectorImage, Path
 from util_files.simplification.join_qb import join_quad_beziers
 from util_files.rendering.cairo import render, PT_LINE, PT_QBEZIER
@@ -62,6 +63,15 @@ def line_to_curve(line):
 
 
 if __name__ == '__main__':
+    '''
+    Augmentation is performed on whole image than it splits into patches with something on it.
+    
+    patch_with: with of the patches 
+    path height: height of the patches
+    mirroring: is augmentation with mirroring 
+    rotation_min, rotation_max: range of the rotations
+    augmentations_n: number of augmentation
+    '''
     filename = sys.argv[1]
     patches_dir = sys.argv[2]
 
@@ -99,7 +109,7 @@ if __name__ == '__main__':
         augmented_image.translate(translation, adjust_view=True)
 
         patches = augmented_image.split_to_patches((patch_width, patch_height)).reshape(-1)
-
+        print(len(patches))
         basename = os.path.basename(filename)[:-4]
         orientation = {False: 'o', True: 'm'}[mirror]
         for patch_i, patch in enumerate(patches):
