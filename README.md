@@ -79,7 +79,7 @@ To shows how some of functions usability, there are several noteooks ar notebbok
 ## How to run 
 
 
-## How to train 
+## How to train
 
 
 ### BibTeX
