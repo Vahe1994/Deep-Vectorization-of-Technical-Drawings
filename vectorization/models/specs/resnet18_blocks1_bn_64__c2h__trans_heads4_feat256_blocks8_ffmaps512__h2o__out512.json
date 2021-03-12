@@ -1,0 +1,25 @@
+{
+  "kind": "GenericVectorizationNet",
+  "conv": {
+    "kind": "resnet",
+    "in_channels": 3,
+    "convmap_channels": 64,
+    "conf": "18",
+    "blocks": 1,
+    "bn": true
+  },
+  "use_fc_from_conv": true,
+  "hidden": {
+    "kind": "transformer_decoder",
+    "ffn_dim": 512,
+    "n_head": 4,
+    "feature_dim": 256,
+    "num_layers": 8
+  },
+  "use_fc_from_hidden": true,
+  "output": {
+    "kind": "output",
+    "in_features": 512,
+    "out_features": 8
+  }
+}

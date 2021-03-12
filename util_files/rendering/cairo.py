@@ -19,6 +19,7 @@ def render(data, dimensions, data_representation='paths', linecaps='square', lin
     linejoin = _linejoin[linejoin]
 
     # draw
+
     surface = cairo.ImageSurface(cairo.FORMAT_A8, *dimensions, data=memoryview(image), stride=buffer_width)
     with cairo.Context(surface) as ctx:
         ctx.set_operator(cairo.OPERATOR_SOURCE)

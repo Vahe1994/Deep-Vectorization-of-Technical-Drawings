@@ -14,8 +14,12 @@ class Output(ParameterizedModule):
     def forward(self, vector_features):
         # vector_features: [b, n, hidden_dim]
         fc = self.final_fc(vector_features)  # [b, n, output_dim]
-#         coord = (self.final_tanh(fc[..., :-1]) + 1.) / 2.  # [b, n, output_dim - 1]
-        coord = fc[..., :-1]  # [b, n, output_dim - 1]
+#
+        if(fc.shape[2]<=6):
+            #for lines coord from 0 to 1
+            coord = (self.final_tanh(fc[..., :-1]) + 1.) / 2.  # [b, n, output_dim - 1]
+        else:
+            coord = fc[..., :-1]  # [b, n, output_dim - 1]
         prob = self.final_sigm(fc[..., -1]).unsqueeze(-1)  # [b, n, 1]
         return torch.cat((coord, prob), dim=-1)  # [b, n, output_dim]
 

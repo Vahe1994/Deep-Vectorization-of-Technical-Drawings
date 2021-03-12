@@ -4,7 +4,8 @@ from util_files.rendering.cairo import render as original_render
 from util_files.metrics.raster_metrics import iou_score
 from util_files.data.graphics.graphics import VectorImage
 from util_files.data.graphics.units import Pixels
-
+import  util_files.metrics.vector_metrics as vmetrics
+from util_files.data.graphics_primitives import PT_LINE
 
 def render(data, dimensions, data_representation='paths', linecaps='butt', linejoin='miter'):
     return original_render(data, dimensions, data_representation=data_representation, linecaps=linecaps,
@@ -65,3 +66,19 @@ def iou_raster_reference(output_vector_image: VectorImage, reference_raster_imag
     h, w = reference_raster_image_np.shape
     output_rasterization = output_rasterization[:h, :w]
     return iou_score(reference_raster_image_np, output_rasterization, binarization=binarization).item()
+
+
+def calc_iou__vect_image(y_pred, y_true_image):
+    y_pred = y_pred.cpu().numpy()
+    RASTER_RES = (64, 64)
+    y_true = (y_true_image[..., 0])[:, :, :]
+
+    METRIC_PARAMS = {'binarization': 'median', 'raster_res': RASTER_RES}
+    y_pred[y_pred <= 0] = 0.
+    y_pred[y_pred >= 1] = 1.
+
+    if y_pred.shape[-1] == 5:
+        y_pred = np.concatenate((y_pred, np.ones((y_pred.shape[:-1]))[:, :, None]), axis=-1)
+
+    y_pred_vector = vmetrics.batch_numpy_to_vector(y_pred, RASTER_RES,primitive_type=PT_LINE)
+    return vmetrics.iou_score(y_true, y_pred_vector, **METRIC_PARAMS)
