@@ -4,83 +4,90 @@ Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawi
 ![alt text](https://drive.google.com/uc?export=view&id=191r0QAaNhOUIaHPOlPWH5H4Jg7qxCMRA) 
 ## IMPORTANT
  
-Because, this project is massive and I'm done code refactoring and restructuring for making user friendly repository with module like design
-(to be easily modifiable and added new parts if needed),
-not all functions are yet fully added and tested.Sorry for  inconvenience.
-I'm currently working on it. I don't recommend to train or run this code yet,
-but you can look at parts that you may interested with.  Datasets and files to compare are ready to be used. 
-I will soon add trained model and will add readme and correct the code if needed to run smoothly.
-See table below.
+The project is constantly updating to add more future and make a code easier to understand. 
+In the table below, you can see the current state of the repository and future updates.
 
 | Modules       | Added         | Refactored| Tested|
 | ------------- |:-------------:| :-----:| -----:|
-| vectorization | partly        |    No |    No |
+| vectorization | partly        |    partly |    No |
 | loss functions| yes           |   yes |   yes |
-| cleaning      | yes           |    No |    No |
-| refinement    | yes           |    No |    No |
-| data_scripts  | yes           |    No |    No |
+| cleaning      | yes           |    yes |    No |
+| refinement    | yes           |    partly |    No |
+| data_scripts  | yes           |    yes |    No |
 | datasets      | yes           |   yes |    No |
 | image degradation| yes        |   No  |    yes |
 | merging       | yes           |   No  |    No  |
-| notebooks     | No            |    No |    No |
+| notebooks     | yes            |    partly |    yes |
 | utils         | partly        |    No |    No |
 | rendering     | yes           |   yes |   yes |
 | metrics       | partly        |    No |    No |
-| trained models| No            |    No |    No |
+| trained models| yes            |    No |    No |
 | dockers       | No            |    No |    No |
 | script to run | No            |    No |    No |
-| Readme's      | No            |    No |    No |
+| Readme's | partly            |    No |    No |
 | documentation | partly        |    No |    No |
-| requirment    | No        |    No |    No |
+| requirement    | No        |    No |    No |
 
 ## Repository Structure
 
-To increase user friendly for changes we decided to make repository module like.
-The main modules are cleaning,vectorization,refinement and merging(each module has according folder).
-Each folder has readme with more details. Here is brief content of each folder.
+To make the repository user-friendly, we decided to stick with - module-like structure.
+The main modules are cleaning, vectorization, refinement, and merging(each module has an according to folder).
+Each folder has Readme with more details. Here is the brief content of each folder.
 
-* cleaning - model,script to train and run, script to generate synthetic data 
+* cleaning - model, script to train and run, script to generate synthetic data 
 * vectorization - NN models, script to train
-* refinement - refinement module for curves and for lines
-* merging - merging module for curves and for lines
-* dataset - scripts to download ABC,PFP,cleaning datasets, scripts to modify data into patches and memory maped them.
-* notebooks - playground to show some function in action
+* refinement - refinement module for curves and lines
+* merging - merging module for curves and lines
+* dataset - scripts to download ABC, PFP, cleaning datasets, scripts to modify data into patches, and memory-mapped them.
+* notebooks - a playground to show some function in action
 * utils - loss functions, rendering, metrics
 * scripts - scripts to run training and evaluation
 
 ## Requirments
 Linux system \
 Python 3
-Pytorch 1.3+ \
+Pytorch 1.3 + \
 tochvision \
 rtree \
 conda \
+cairocffi
 
 
 ## Compare 
 
-If you want to compare with us without running code you can download our results on full pipeline on test set
+To compare with us without running code, you can download our results on the full pipeline on the test set
 for [pfp](https://drive.google.com/file/d/1FGm-JQsvOa5sbi_f_-MMl1XC5Z8JGe0F/view?usp=sharing) and for 
-[abc](https://drive.google.com/file/d/1lR5lea3sY4Bhp9QL4MmmPs0kqZ5voPGu/view?usp=sharing) .
+[abc](https://drive.google.com/file/d/1lR5lea3sY4Bhp9QL4MmmPs0kqZ5voPGu/view?usp=sharing).
+
 
 ## Dataset
 Scripts to download dataset are in folder dataset/.
-* For abc,real datasets use  download_dataset.sh
-* For PFP use precision_floorplan_download.py  
+* For ABC,real datasets use download_dataset.sh
+* For PFP, use precision_floorplan_download.py  
 Read ReadMe there for more instructions.
 
 ## Notebooks 
 
-To shows how some of functions usability, there are several noteooks ar notebboks folder.
+To show how some of the usability of the functions, there are several notebooks in the notebooks folder.
 1) Rendering notebook
-2) Dataset loading,model loading, model training,loss function loading
+2) Dataset loading, model loading, model training, loss function loading
+3) Notebook that illustrates  how to work with pretrained model and how to do refinement on lines(without merging) 
+4) Notebook that illustrates how to work with pretrained model and how to do refinement on curves(without merging)
 
+## Models
+
+Download pretrained models for [curve](https://drive.google.com/file/d/18jN37pMvEg9S05sLdAznQC5UZDsLz-za/view?usp=sharing)
+and for [line](https://drive.google.com/file/d/1Zf085V3783zbrLuTXZxizc7utszI9BZR/view?usp=sharing) .
 
 ## How to run 
+Look at notebooks pretrain_model_loading_and_evaluation_for_line.ipynb and 
+pretrain_model_loading_and_evaluation_for_curve.ipynb , for an example how to run primitive estimation 
+and refinement for curve and line.  
+
 
 
 ## How to train
-
+Look at vectorization/srcipts/train_vectorizatrion (currently under refactoring)
 
 ### BibTeX
 ```

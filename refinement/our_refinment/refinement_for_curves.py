@@ -20,19 +20,24 @@ from util_files.optimization.primitives.quadratic_bezier_tensor import Quadratic
 from util_files.simplification.join_qb import join_quad_beziers
 
 
-def main(options, control_points_n=3, dtype=torch.float32, device='cuda',
+
+def main(options, intermediate_output=None, control_points_n=3, dtype=torch.float32, device='cuda',
          primitives_n=None, primitive_type=None, merge_period=60, lr=.05, the_width_percentile=90,
          optimization_iters_n=None, batch_size=300, measure_period=20, reinit_period=20, max_reinit_iter=100,
          min_width=.3, min_confidence=64 * .5, min_length=1.7, append_iters_to_outdir=True):
+
     logger = Logger.prepare_logger(loglevel='info', logfile=None)
-
-    _, _, options.image_name, options.output_dir = job_tuples[options.dataset][options.job_id]
-    sample_name = options.image_name[:-4]
-    intermediate_output_path = f'{options.output_dir}/intermediate_output/{sample_name}.pickle'
-    logger.info(f'1. Load intermediate output from {intermediate_output_path}')
-    with open(intermediate_output_path, 'rb') as handle:
-        intermediate_output = pickle.load(handle)
-
+    if intermediate_output is not None:
+        sample_name = options.image_name[0][:-4]
+        intermediate_output_path = f'{options.output_dir}/intermediate_output/{sample_name}.pickle'
+        logger.info(f'1. Load intermediate output from {intermediate_output_path}')
+    else:
+        _, _, options.image_name, options.output_dir = job_tuples[options.dataset][options.job_id]
+        sample_name = options.image_name[:-4]
+        intermediate_output_path = f'{options.output_dir}/intermediate_output/{sample_name}.pickle'
+        logger.info(f'1. Load intermediate output from {intermediate_output_path}')
+        with open(intermediate_output_path, 'rb') as handle:
+            intermediate_output = pickle.load(handle)
     for k, v in options.__dict__.items():
         setattr(intermediate_output['options'], k, v)
     options = intermediate_output['options']
@@ -43,7 +48,7 @@ def main(options, control_points_n=3, dtype=torch.float32, device='cuda',
 
     raster_patches = torch.as_tensor(intermediate_output['patches_rgb'], dtype=dtype)
     raster_patches = raster_patches.reshape(raster_patches.shape[:3])
-
+    outp_dir = options.output_dir
     if not options.init_random:
         logger.info('2.5. Repatch')
         confident = model_output[:, :, -1] >= min_confidence
@@ -196,6 +201,8 @@ def main(options, control_points_n=3, dtype=torch.float32, device='cuda',
     logger.info(f'9. Save optimization result to {optimization_output_path}')
     os.makedirs(os.path.dirname(optimization_output_path), exist_ok=True)
     get_vectorimage(primitives_after_optimization).save(optimization_output_path)
+    options.output_dir = outp_dir
+    return primitives_after_optimization, patch_offsets, repatch_scale, get_vectorimage(primitives_after_optimization)
 
 
 def repatch(raster_patches, patch_offsets, model_output, scale=None, h=None, w=None):
