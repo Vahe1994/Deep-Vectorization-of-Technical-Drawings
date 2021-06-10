@@ -6,7 +6,7 @@ import sys
 import numpy as np
 
 # sys.path.append('/code')
-sys.path.append('/home/vage/PycharmProjects/Deep-Vectorization-of-Technical-Drawings/')
+sys.path.append('/code/Deep-Vectorization-of-Technical-Drawings/')
 from util_files.data.graphics.graphics import VectorImage, Path
 from util_files.simplification.join_qb import join_quad_beziers
 from util_files.rendering.cairo import render, PT_LINE, PT_QBEZIER

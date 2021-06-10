@@ -1,4 +1,4 @@
-from refinement.our_refinment.utils.lines_refinement_functions import *
+from refinement.our_refinement.utils.lines_refinement_functions import *
 import argparse
 from util_files.metrics.iou import calc_iou__vect_image
 def render_optimization_hard(patches_rgb, patches_vector, device, options, name):
@@ -240,7 +240,7 @@ def render_optimization_hard(patches_rgb, patches_vector, device, options, name)
                 vector_rendering[patches_to_optimize] = render_lines_pt(lines_batch_final[patches_to_optimize])
                 im = rasters_batch[patches_to_optimize] - vector_rendering[patches_to_optimize]
 
-        #TODO add IOU calc
+            #TODO add IOU calc
 
             if (i % 20 == 0):
                 iou_mass.append(calc_iou__vect_image(lines_batch_final.data / 64, patches_rgb_im[take_batches]))

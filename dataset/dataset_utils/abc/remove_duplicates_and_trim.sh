@@ -11,4 +11,4 @@ postprocess_svg(){
 }
 export -f postprocess_svg
 
-find $src_dir -type f -name '*.svg' | /trinity/home/o.voinov/bin/parallel postprocess_svg
+find $src_dir -type f -name '*.svg' | parallel postprocess_svg

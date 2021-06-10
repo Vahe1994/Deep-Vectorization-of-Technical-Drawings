@@ -1,32 +1,7 @@
 ## Deep Vectorization of Technical Drawings|[Webpage](http://adase.group/3ddl/projects/vectorization/) | [Paper](https://arxiv.org/abs/2003.05471) | [Video](https://www.youtube.com/watch?v=lnQNzHJOLvE&t=15s)| [Slide](https://drive.google.com/file/d/1ZrykQeA2PE4_8yf1JwuEBk9sS4OP8KeM/view?usp=sharing)
 Official Pytorch repository for ECCV 2020 [Deep Vectorization of Technical Drawings](https://link.springer.com/chapter/10.1007/978-3-030-58601-0_35)
 
-![alt text](https://drive.google.com/uc?export=view&id=191r0QAaNhOUIaHPOlPWH5H4Jg7qxCMRA) 
-## IMPORTANT
- 
-The project is constantly updating to add more future and make a code easier to understand. 
-In the table below, you can see the current state of the repository and future updates.
-
-| Modules       | Added         | Refactored| Tested|
-| ------------- |:-------------:| :-----:| -----:|
-| vectorization | partly        |    partly |    No |
-| loss functions| yes           |   yes |   yes |
-| cleaning      | yes           |    yes |    No |
-| refinement    | yes           |    partly |    No |
-| data_scripts  | yes           |    yes |    No |
-| datasets      | yes           |   yes |    No |
-| image degradation| yes        |   No  |    yes |
-| merging       | yes           |   No  |    No  |
-| notebooks     | yes            |    partly |    yes |
-| utils         | partly        |    No |    No |
-| rendering     | yes           |   yes |   yes |
-| metrics       | partly        |    No |    No |
-| trained models| yes            |    No |    No |
-| dockers       | No            |    No |    No |
-| script to run | No            |    No |    No |
-| Readme's | partly            |    No |    No |
-| documentation | partly        |    No |    No |
-| requirement    | No        |    No |    No |
+![alt text](https://drive.google.com/uc?export=view&id=191r0QAaNhOUIaHPOlPWH5H4Jg7qxCMRA)
 
 ## Repository Structure
 
@@ -44,13 +19,14 @@ Each folder has Readme with more details. Here is the brief content of each fold
 * scripts - scripts to run training and evaluation
 
 ## Requirments
-Linux system \
+Linux system  
 Python 3
-Pytorch 1.3 + \
-tochvision \
-rtree \
-conda \
-cairocffi
+
+See requirments.txt and additional packages
+
+cairo==1.14.12  
+pycairo==1.19.1  
+chamferdist==1.0.0
 
 
 ## Compare 
@@ -79,15 +55,39 @@ To show how some of the usability of the functions, there are several notebooks 
 Download pretrained models for [curve](https://drive.google.com/file/d/18jN37pMvEg9S05sLdAznQC5UZDsLz-za/view?usp=sharing)
 and for [line](https://drive.google.com/file/d/1Zf085V3783zbrLuTXZxizc7utszI9BZR/view?usp=sharing) .
 
-## How to run 
-Look at notebooks pretrain_model_loading_and_evaluation_for_line.ipynb and 
-pretrain_model_loading_and_evaluation_for_curve.ipynb , for an example how to run primitive estimation 
-and refinement for curve and line.  
+## How to run
+1. Download models.
+2. Either use Dockerfile to create docker image with needed environment or just install requirements
+3. Run scripts/run_pipeline.sh with correct paths for trained model, data dir and output dir. Don't forget to chose primitive type and primitive count in one patch.
+
+P.s. currently cleaning model not included there.
+   
+## Dockerfile 
+
+Build the docker image:
+
+```bash
+docker build -t Dockerfile owner/name:version .
+```
+example:
+```bash
+docker build -t vahe1994/deep_vectorization:latest .
+```
 
 
+When running container mount folder with reporitory into code/, folder with datasets in data/ folder with logs in logs/
+```bash
+docker run --rm -it --shm-size 128G -p 4045:4045 --mount type=bind,source=/home/code,target=/code --mount type=bind,source=/home/data,target=/data --mount type=bind,source=/home/logs,target=/logs  --name=container_name owner/name:version /bin/bash
+```
+
+Anaconda with packages are installed in follder opt/ . Environement with packages that needed are installed in environment vect-env.
+. To activate it run in container
+```bash
+. /opt/.venv/vect-env/bin/activate/
+```
 
 ## How to train
-Look at vectorization/srcipts/train_vectorizatrion (currently under refactoring)
+Look at vectorization/srcipts/train_vectorizatrion 
 
 ### BibTeX
 ```

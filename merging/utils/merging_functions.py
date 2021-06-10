@@ -11,6 +11,7 @@ from tqdm import tqdm
 import numpy as np
 import os
 import math
+from PIL import Image
 
 
 from scipy.spatial import distance
@@ -22,6 +23,8 @@ import util_files.data.graphics_primitives as graphics_primitives
 from util_files.rendering.cairo import render_with_skeleton
 
 from util_files.geometric import liang_barsky_screen
+from util_files.rendering.cairo  import render,render_with_skeleton
+from util_files.data.graphics_primitives import PT_LINE,  PT_CBEZIER, PT_QBEZIER
 
 
 
@@ -42,15 +45,27 @@ def clip_to_box(y_pred, box_size=(64, 64)):
         clipped_point1, clipped_point2, is_drawn = \
             liang_barsky_screen(point1, point2, bbox)
     except:
-        np.asarray([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
+        return np.asarray([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
 
     if (clipped_point1 and clipped_point2):
         return np.asarray([clipped_point1, clipped_point2, y_pred[4:]]).ravel()
     else:
         return np.asarray([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
 
+def assemble_vector_patches_curves(patches_vector, patches_offsets):
+    primitives = []
+    i = 0
+    for patch_vector, patch_offset in zip(patches_vector, patches_offsets):
+        i += 1
 
-def assemble_vector_patches(patches_vector, patches_offsets):
+        patch_vector[:, [0, 2, 4]] += patch_offset[1]
+
+
+        patch_vector[:, [1, 3, 5]] += patch_offset[0]
+        primitives.append(patch_vector)
+    return np.array(primitives)
+
+def assemble_vector_patches_lines(patches_vector, patches_offsets):
     primitives = []
     i = 0
     for patch_vector, patch_offset in zip(patches_vector, patches_offsets):
@@ -64,18 +79,23 @@ def assemble_vector_patches(patches_vector, patches_offsets):
     return np.array(primitives)
 
 def tensor_vector_graph_numpy(y_pred_render, patches_offsets, options):
+
     nump = np.array(list(map(clip_to_box, y_pred_render.reshape(-1, 6).cpu().detach().numpy())))
-    nump = assemble_vector_patches(np.array((nump.reshape(-1, options.model_output_count, 6))),
-                                   np.array(patches_offsets))
+
+    nump = assemble_vector_patches_lines(np.array((nump.reshape(-1, options.model_output_count, 6))),
+                                         np.array(patches_offsets))
+
+
     nump = nump.reshape(-1, 6)
+
 
     nump = nump[~np.isnan(nump).any(axis=1)]
 
     nump = nump[(nump[:, -2] > 0.3)]
     nump = nump[(nump[:, -1] > 0.5)]
-    print('nump',nump.shape)
+
     nump = nump[((nump[:, 0] - nump[:, 2]) ** 2 + (nump[:, 1] - nump[:, 3]) ** 2 >= 3)]
-    print('nump',nump.shape)
+
     return nump
 
 
@@ -90,8 +110,8 @@ def merge_close_lines(lines, threshold=0.5):
 
     dt = np.hstack((lines[:, 0], lines[:, 2]))
     y_t = np.hstack((lines[:, 1], lines[:, 3]))
-#     if lines.shape[0] == 1:
-#         return np.array(lines)
+    #     if lines.shape[0] == 1:
+    #         return np.array(lines)
     if lines.shape[0] == 2:
         if (lines[0, 0] <= lines[0, 2] and lines[0, 1] <= lines[0, 3]) or (lines[0, 2] <= lines[0, 0] and lines[0, 3] <= lines[0, 1]):
             return np.array([np.min(dt), np.min(y_t), np.max(dt), np.max(y_t)])
@@ -164,7 +184,7 @@ def point_segment_distance(point, line):
 def dist(line0, line1):
     if (point_to_line_distance(line0[:2], line1[:4]) >= 2 or point_to_line_distance(line0[2:4], line1[
                                                                                                 :4]) >= 2 or point_to_line_distance(
-            line1[:2], line0[:4]) >= 2 or point_to_line_distance(line1[2:4], line0[:4]) >= 2):
+        line1[:2], line0[:4]) >= 2 or point_to_line_distance(line1[2:4], line0[:4]) >= 2):
         return 9999
 
     return min(distance.euclidean(line0[:2], line1[:2]), distance.euclidean(line0[2:4], line1[:2]),
@@ -345,13 +365,12 @@ def lines_matching(lines, frac = 0.01):
 
     return lines
 
-
-
-
-
 def save_svg(result_vector, size, name, output_dir):
-    print(size)
     os.makedirs(output_dir, exist_ok=True)
-    img = draw_with_skeleton(result_vector, drawing_scale=1, skeleton_line_width=0, skeleton_node_size=0, max_x=64, max_y=64)
-    return img
+    if len(size)==2:
+        size = (1,size[0],size[1])
+    a ={PT_LINE:np.concatenate((result_vector[...,:-1], result_vector[...,-1][...,None]),axis=1)}
+    rendered_image = render(a,(size[2],size[1]), data_representation='vahe',linecaps='round')
+    Image.fromarray(rendered_image).save(output_dir + name)
+    return rendered_image
 
