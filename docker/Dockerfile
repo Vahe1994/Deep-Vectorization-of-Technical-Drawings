@@ -16,8 +16,6 @@ RUN rm Anaconda3-2020.11-Linux-x86_64.sh
 
 ENV PATH /opt/anaconda3/bin:$PATH
 
-
-
 COPY ./Deep-Vectorization-of-Technical-Drawings /opt/Deep-Vectorization-of-Technical-Drawings
 
 RUN python -m venv /opt/.venv/vect-env &&\
@@ -25,6 +23,6 @@ RUN python -m venv /opt/.venv/vect-env &&\
 pip install -r /opt/Deep-Vectorization-of-Technical-Drawings/requirements.txt &&\
 conda install -c anaconda cairo==1.14.12 &&\
 conda install -c conda-forge pycairo==1.19.1 &&\
-pip install chamferdist==1.0.0 
+pip install chamferdist==1.0.0
 
 RUN rm -rf /opt/Deep-Vectorization-of-Technical-Drawings/

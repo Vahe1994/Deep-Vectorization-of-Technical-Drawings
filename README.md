@@ -38,10 +38,12 @@ for [pfp](https://drive.google.com/file/d/1FGm-JQsvOa5sbi_f_-MMl1XC5Z8JGe0F/view
 
 ## Dataset
 Scripts to download dataset are in folder dataset/.
-* For ABC,real datasets use download_dataset.sh
+* For ABC ,real datasets download [here](https://drive.google.com/file/d/1hET43eM2cfwfqI7g1VsusU1wNpvc2VHl/view?usp=sharing) or use scriptdownload_dataset.sh
 * For PFP, use precision_floorplan_download.py  
 Read ReadMe there for more instructions.
-
+* Real dataset for cleaning download [here](https://drive.google.com/file/d/1dgJLgtPvk9SK9rOCnw-WQRBG6OsMUEH3/view?usp=sharing) or use script download_dataset.sh
+* Synthetic datset  generation script for cleaning can be found in cleaning/scripts.
+* 
 ## Notebooks 
 
 To show how some of the usability of the functions, there are several notebooks in the notebooks folder.
@@ -87,7 +89,7 @@ Anaconda with packages are installed in follder opt/ . Environement with package
 ```
 
 ## How to train
-Look at vectorization/srcipts/train_vectorizatrion 
+Look at vectorization /srcipts/train_vectorizatrion 
 
 ### Citing
 ```

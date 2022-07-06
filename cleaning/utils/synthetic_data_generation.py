@@ -3,7 +3,7 @@ import numpy as np
 import imageio
 
 from glob import glob
-
+import os
 from PIL import Image
 import PIL.ImageOps
 import cairocffi as cairo
@@ -157,7 +157,7 @@ class Synthetic:
         cr.fill()
         cr.restore()
 
-    def MergeImages(self, img_path, name, prev_degr):
+    def MergeImages(self, img_path, name, prev_degr,backgrouds_path='../../dataset/Background/*.png'):
         im1 = Image.open(img_path + name + '_h_gt.png').convert('RGB')
         if (not prev_degr):
             png_image = np.array(im1)
@@ -169,7 +169,7 @@ class Synthetic:
             png_image = gray_float_to_8bit(png_image)
             im1 = Image.fromarray(png_image).convert('RGB')
 
-        backgrounds = glob('../../dataset/Background/*.png')
+        backgrounds = glob(backgrouds_path)
         r = np.random.randint(0, len(backgrounds))
         im2 = Image.open(backgrounds[r])
 
@@ -224,8 +224,10 @@ class Synthetic:
 
         imageio.imwrite(img_path + name + '_h_gt.png', Image.fromarray(png_image).convert('RGB'))
 
-    def get_image(self, img_path='../data/Synthetic/', name='1'):
-        ps = cairo.SVGSurface(img_path + "svgfile1.svg", self.MAX_X, self.MAX_Y)
+    def get_image(self, img_path='../data/Synthetic/', name='1',backgrouds_path='/data/Background/*.png'):
+        if not os.path.exists(img_path + '/svg/'):
+            os.makedirs(img_path + '/svg/')
+        ps = cairo.SVGSurface(img_path + 'svg' + name + ".svg", self.MAX_X, self.MAX_Y)
         ctx = cairo.Context(ps)
         ctx.save()
         ctx.set_source_rgb(1, 1, 1)
@@ -261,4 +263,4 @@ class Synthetic:
         ctx.set_operator(cairo.OPERATOR_LIGHTEN)
         ps.write_to_png(img_path + name + '_nh_gt.png')
         self.syn_degradate(img_path, name, prev_degr)
-        self.MergeImages(img_path, name, prev_degr)
+        self.MergeImages(img_path, name, prev_degr,backgrouds_path)

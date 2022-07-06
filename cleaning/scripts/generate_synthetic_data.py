@@ -1,7 +1,7 @@
 import argparse
 import sys
 sys.path.append("../../")
-from cleaning.utils.Synthetic_data_generation import Synthetic
+from cleaning.utils.synthetic_data_generation import Synthetic
 from tqdm import tqdm
 
 
