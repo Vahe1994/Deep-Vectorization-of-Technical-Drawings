@@ -60,7 +60,7 @@ nbformat==5.1.2
 nest-asyncio==1.5.1
 networkx==2.5
 notebook==6.4.1
-numpy==1.20.0
+numpy==1.22.0
 oauthlib==3.1.0
 omegaconf==2.0.6
 opencv-python==4.5.1.48
