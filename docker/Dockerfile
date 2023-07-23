@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.1-devel-ubuntu16.04
+FROM nvidia/cuda:11.1.1-devel
 RUN apt-get update
 
 RUN apt-get install -y --no-install-recommends apt-utils

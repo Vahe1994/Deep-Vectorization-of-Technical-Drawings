@@ -69,11 +69,11 @@ P.s. currently cleaning model not included there.
 Build the docker image:
 
 ```bash
-docker build -t Dockerfile owner/name:version .
+docker build -f docker/Dockerfile -t owner/name:version .
 ```
 example:
 ```bash
-docker build -t vahe1994/deep_vectorization:latest .
+docker build -f docker/Dockerfile -t vahe1994/deep_vectorization:latest .
 ```
 
 
