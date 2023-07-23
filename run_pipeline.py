@@ -202,7 +202,7 @@ def parse_args():
                         help='init model with random [default: False].')
     parser.add_argument('--rendering_type', type=str, default='hard', help='hard -oleg,simple Alexey')
     parser.add_argument('--data_dir', type=str, default="/data/abc_png_svg/", help='dir to folder for input')
-    parser.add_argument('--image_name', type=str, default="00050000_99fd5beca7714bc586260b6a_step_000.png",
+    parser.add_argument('--image_name', type=str, default=None,
                         help='Name of image.If None will perform to all images in '
                              'folder.[default: None]')
     parser.add_argument('--overlap', type=int, default=0, help='overlap in pixel')
