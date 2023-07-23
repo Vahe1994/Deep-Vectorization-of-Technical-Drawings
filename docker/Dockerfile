@@ -1,4 +1,6 @@
 FROM nvidia/cuda:11.1.1-devel
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A4B469963BF863CC
 RUN apt-get update
 
 RUN apt-get install -y --no-install-recommends apt-utils
