@@ -18,7 +18,7 @@ RUN rm Anaconda3-2020.11-Linux-x86_64.sh
 
 ENV PATH /opt/anaconda3/bin:$PATH
 
-COPY ./Deep-Vectorization-of-Technical-Drawings /opt/Deep-Vectorization-of-Technical-Drawings
+COPY . /opt/Deep-Vectorization-of-Technical-Drawings
 
 RUN python -m venv /opt/.venv/vect-env &&\
 . /opt/.venv/vect-env/bin/activate &&\
