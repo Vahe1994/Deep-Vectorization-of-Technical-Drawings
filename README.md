@@ -41,7 +41,7 @@ Scripts to download dataset are in folder dataset/.
 * For ABC ,real datasets download [here](https://drive.google.com/file/d/1hET43eM2cfwfqI7g1VsusU1wNpvc2VHl/view?usp=sharing) or use scriptdownload_dataset.sh
 * For PFP, use precision_floorplan_download.py  
 Read ReadMe there for more instructions.
-* Real dataset for cleaning download [here](https://drive.google.com/file/d/1dgJLgtPvk9SK9rOCnw-WQRBG6OsMUEH3/view?usp=sharing) or use script download_dataset.sh
+* Real dataset for cleaning download [here](https://disk.yandex.ru/d/L2VZLq48lcQnhQ) or use script download_dataset.sh
 * Synthetic datset  generation script for cleaning can be found in cleaning/scripts.
 * 
 ## Notebooks 
@@ -54,8 +54,8 @@ To show how some of the usability of the functions, there are several notebooks 
 
 ## Models
 
-Download pretrained models for [curve](https://drive.google.com/file/d/18jN37pMvEg9S05sLdAznQC5UZDsLz-za/view?usp=sharing)
-and for [line](https://drive.google.com/file/d/1Zf085V3783zbrLuTXZxizc7utszI9BZR/view?usp=sharing) .
+Download pretrained models for [curve](https://disk.yandex.ru/d/yOZzCSrd-QSACA)
+and for [line](https://disk.yandex.ru/d/FKJuMvNJuy-K9g) .
 
 ## How to run
 1. Download models.
