@@ -1,4 +1,6 @@
-FROM nvidia/cuda:11.1-devel-ubuntu16.04
+FROM nvidia/cuda:11.1.1-devel
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A4B469963BF863CC
 RUN apt-get update
 
 RUN apt-get install -y --no-install-recommends apt-utils
@@ -16,7 +18,7 @@ RUN rm Anaconda3-2020.11-Linux-x86_64.sh
 
 ENV PATH /opt/anaconda3/bin:$PATH
 
-COPY ./Deep-Vectorization-of-Technical-Drawings /opt/Deep-Vectorization-of-Technical-Drawings
+COPY . /opt/Deep-Vectorization-of-Technical-Drawings
 
 RUN python -m venv /opt/.venv/vect-env &&\
 . /opt/.venv/vect-env/bin/activate &&\

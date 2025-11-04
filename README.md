@@ -69,11 +69,11 @@ P.s. currently cleaning model not included there.
 Build the docker image:
 
 ```bash
-docker build -t Dockerfile owner/name:version .
+docker build -f docker/Dockerfile -t owner/name:version .
 ```
 example:
 ```bash
-docker build -t vahe1994/deep_vectorization:latest .
+docker build -f docker/Dockerfile -t vahe1994/deep_vectorization:latest .
 ```
 
 
@@ -85,7 +85,7 @@ docker run --rm -it --shm-size 128G -p 4045:4045 --mount type=bind,source=/home/
 Anaconda with packages are installed in follder opt/ . Environement with packages that needed are installed in environment vect-env.
 . To activate it run in container
 ```bash
-. /opt/.venv/vect-env/bin/activate/
+. /opt/.venv/vect-env/bin/activate
 ```
 
 ## How to train
