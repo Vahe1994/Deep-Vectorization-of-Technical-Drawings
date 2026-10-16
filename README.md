@@ -1,3 +1,10 @@
+> **⚠️ Archived — No Longer Maintained**
+>
+> This repository is no longer actively maintained. The code remains available for research and reproducibility purposes, but no further updates, bug fixes, or support are planned.
+>
+> You are welcome to fork the repository and adapt it to your needs.
+
+
 ## Deep Vectorization of Technical Drawings [[Web page](http://adase.group/3ddl/projects/vectorization/)] [[Paper](https://arxiv.org/abs/2003.05471)] [[Video](https://www.youtube.com/watch?v=lnQNzHJOLvE)] [[Slides](https://drive.google.com/file/d/1ZrykQeA2PE4_8yf1JwuEBk9sS4OP8KeM/view?usp=sharing)]
 Official Pytorch repository for ECCV 2020 paper [Deep Vectorization of Technical Drawings](https://link.springer.com/chapter/10.1007/978-3-030-58601-0_35)
 
