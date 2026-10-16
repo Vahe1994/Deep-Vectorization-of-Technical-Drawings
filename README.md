@@ -1,4 +1,4 @@
-> **⚠️ Archived — No Longer Maintained**
+> **⚠️ Archived, No Longer Maintained**
 >
 > This repository is no longer actively maintained. The code remains available for research and reproducibility purposes, but no further updates, bug fixes, or support are planned.
 >
